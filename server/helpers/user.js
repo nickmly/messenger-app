@@ -64,7 +64,6 @@ exports.login = function(req,res) {
         token: null,
         message: 'Incorrect username or password'
     };
-
     User.findOne({username: req.body.username}).then(function(user){
         user.comparePass(req.body.password, function(err, isMatch){
             if(isMatch) {
@@ -75,13 +74,13 @@ exports.login = function(req,res) {
                 responseObj.auth = true;
                 responseObj.token = token;
                 responseObj.message = 'Logged in successfully.';   
-                return res.status(201).send(responseObj);           
-            }            
+                return res.status(201).send(responseObj);
+            }
+            res.status(401).send(responseObj);
         })
     }).catch(function(err){
         res.send({message: err});
     });
-    res.status(401).send(responseObj);
 }
 
 module.exports = exports;
